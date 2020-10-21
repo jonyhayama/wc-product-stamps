@@ -12,7 +12,7 @@ class wcProductStamps{
 	}
 
 	public function locate_template( $args ){
-		$plugin_path  = WC_CART_GIFTS_APP_PATH . 'views' . DIRECTORY_SEPARATOR;
+		$plugin_path  = WC_PRODUCT_STAMPS_APP_PATH . 'views' . DIRECTORY_SEPARATOR;
 		$template_name = ( is_string( $args ) ) ? $args : $args['template'];
 		$template_name = "$template_name.php";
 		$template = locate_template( array(
@@ -57,9 +57,9 @@ class wcProductStamps{
 	public function register_autoload(){
     spl_autoload_register(function ($class_name) {
       if( strpos( $class_name, 'wcProductStamps') === 0 ){
-				$classPath = WC_CART_GIFTS_APP_PATH;
+				$classPath = WC_PRODUCT_STAMPS_APP_PATH;
 				if( strpos( $class_name, 'wcProductStamps\config') === 0 ){
-					$classPath = WC_CART_GIFTS_DIR_PATH;
+					$classPath = WC_PRODUCT_STAMPS_DIR_PATH;
 				}
         $class_name = str_replace( '\\', DIRECTORY_SEPARATOR, $class_name );
 				$class_name = str_replace( 'wcProductStamps' . DIRECTORY_SEPARATOR, $classPath, $class_name );
@@ -71,11 +71,9 @@ class wcProductStamps{
   }
   
   public function load_classes(){
-    // $this->cart_gift = new wcProductStamps\model\cartGift;
+    $this->product_stamp = new wcProductStamps\model\productStamp;
 
-    // $this->cartGifts = new wcProductStamps\controller\cartGifts;
-    // $this->cart = new wcProductStamps\controller\cart;
-    // $this->order = new wcProductStamps\controller\order;
+    $this->products = new wcProductStamps\controller\products;
   }
 
   public function add_hooks(){
@@ -85,20 +83,20 @@ class wcProductStamps{
   }
   
   public function enqueue_scripts(){
-		// wp_enqueue_style( 'wc-product-stamps-style', WC_CART_GIFTS_ASSETS_URL . '/css/frontend.css', array(), '0.1.7', 'all' );
+		// wp_enqueue_style( 'wc-product-stamps-style', WC_PRODUCT_STAMPS_ASSETS_URL . '/css/frontend.css', array(), '0.1.7', 'all' );
 
-    // wp_enqueue_script( 'wc-product-stamps-script', WC_CART_GIFTS_ASSETS_URL . '/js/frontend.js', array('jquery'), '0.0.1', true );
-    // wp_localize_script( 'wc-product-stamps-script', 'WC_CART_GIFTS', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
+    // wp_enqueue_script( 'wc-product-stamps-script', WC_PRODUCT_STAMPS_ASSETS_URL . '/js/frontend.js', array('jquery'), '0.0.1', true );
+    // wp_localize_script( 'wc-product-stamps-script', 'WC_PRODUCT_STAMPS', [ 'ajax_url' => admin_url( 'admin-ajax.php' ) ] );
 	}
 
 	public function admin_enqueue_scripts(){
-		// wp_enqueue_style( 'wc-product-stamps-style', WC_CART_GIFTS_ASSETS_URL . '/css/backend.css', array(), '0.1', 'all' );
+		// wp_enqueue_style( 'wc-product-stamps-style', WC_PRODUCT_STAMPS_ASSETS_URL . '/css/backend.css', array(), '0.1', 'all' );
 
-		// wp_enqueue_script( 'wc-product-stamps-script', WC_CART_GIFTS_ASSETS_URL . '/js/backend.js', array('jquery'), '0.1', true );
+		// wp_enqueue_script( 'wc-product-stamps-script', WC_PRODUCT_STAMPS_ASSETS_URL . '/js/backend.js', array('jquery'), '0.1', true );
 	}
   
 	public function load_plugin_textdomain(){
-		load_plugin_textdomain( 'wc-product-stamps', false, basename( dirname( WC_CART_GIFTS_PLUGIN_FILE ) ) . '/languages' ); 
+		load_plugin_textdomain( 'wc-product-stamps', false, basename( dirname( WC_PRODUCT_STAMPS_PLUGIN_FILE ) ) . '/languages' ); 
 	}
 	
 	public function getModule( $module ){
@@ -109,7 +107,7 @@ class wcProductStamps{
 	
 	public function getPluginInfo( $info = '' ){
 		if( !$this->pluginInfo ){
-			$this->pluginInfo = get_plugin_data( WC_CART_GIFTS_DIR_PATH . 'wc-product-stamps.php' );
+			$this->pluginInfo = get_plugin_data( WC_PRODUCT_STAMPS_DIR_PATH . 'wc-product-stamps.php' );
 		}
 		if( $info ){
 			return $this->pluginInfo[$info];
