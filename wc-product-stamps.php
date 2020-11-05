@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Product Stamps
 Plugin URI: 
 Description: WooCommerce Product Stamps
-Version: 0.0.1
+Version: 0.0.2
 Author: Jony Hayama
 Author URI: https://jony.dev
 */
