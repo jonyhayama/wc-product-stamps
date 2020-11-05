@@ -10,7 +10,7 @@ class products{
     add_action( 'wp_head', [ $this, 'inject_css' ] );
     
     add_filter( 'woocommerce_shipping_free_shipping_is_available', [ $this, 'activate_free_shipping' ], 9999 );
-    add_filter( 'acf/fields/taxonomy/wp_list_categories/key=field_5f8989056d196', [ $this, 'filter_available_stamps' ], 10, 2);
+    add_filter( 'acf/fields/taxonomy/query/key=field_5f8989056d196', [ $this, 'filter_available_stamps' ], 10, 2);
   }
 
   public function activate_free_shipping( $is_available ){
@@ -119,8 +119,8 @@ class products{
             'id' => '',
           ),
           'taxonomy' => 'product_stamp',
-          'field_type' => 'radio',
-          'allow_null' => 0,
+          'field_type' => 'select',
+          'allow_null' => 1,
           'add_term' => 0,
           'save_terms' => 1,
           'load_terms' => 1,
