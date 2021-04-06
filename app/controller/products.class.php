@@ -8,6 +8,7 @@ class products{
     add_action( 'woocommerce_before_shop_loop_item_title', [ $this, 'print_conditional_product_stamps' ], 11 );
     add_action( 'woocommerce_before_shop_loop_item_title', [ $this, 'print_product_stamp' ], 12 );
     add_action( 'wp_head', [ $this, 'inject_css' ] );
+    add_shortcode( 'print_product_stamps', [ $this, 'print_product_stamps_shortcode' ] );
     
     add_filter( 'woocommerce_shipping_free_shipping_is_available', [ $this, 'activate_free_shipping' ], 9999 );
     add_filter( 'acf/fields/taxonomy/query/key=field_5f8989056d196', [ $this, 'filter_available_stamps' ], 10, 2);
@@ -45,8 +46,20 @@ class products{
     echo '</style>';
   }
 
-  public function print_product_stamp(){
-    $stamp = get_field( 'stamp' );
+  public function print_product_stamps_shortcode($atts){
+    $atts = shortcode_atts([
+      'product_id' => ''
+    ], $atts);
+
+    ob_start();
+    $this->print_product_stamp($atts['product_id']);
+    $this->print_conditional_product_stamps($atts['product_id']);
+    return ob_get_clean();
+  }
+
+  public function print_product_stamp($product_id = null){
+    $product_id = $product_id ?: get_the_ID();
+    $stamp = get_field( 'stamp', $product_id );
     if( $stamp ){
       $term = get_term( $stamp );
       $image = get_field('image', "term_{$stamp}");
@@ -54,7 +67,7 @@ class products{
     }
   }
 
-  public function print_conditional_product_stamps(){
+  public function print_conditional_product_stamps($product_id = null){
     $args = [
       'taxonomy' => 'product_stamp',
       'hide_empty' => false,
@@ -69,7 +82,8 @@ class products{
       'order' => 'ASC',
       'meta_key' => 'last_units'
     ];
-    global $product;
+    $product_id = $product_id ?: get_the_ID();
+    $product = wc_get_product( $product_id );
     $stock = $product->get_stock_quantity();
     $terms = get_terms( $args );
     foreach( $terms as $term ){
